@@ -1,3 +1,6 @@
+// Project: 	Caesar Ciphers – cipher.c
+// Author:	Yonglei Tao
+
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,16 +27,10 @@ void initializeDecyptArray(char encypt[], char decrypt[]);
 // pass the decrypt array to parameter substitute if decryption is intended
 void processInput(FILE * inf, FILE * outf, char substitute[]);
 
-
-
-
 int main(int argc, char* argv[])
 {  
-	
-	char key[4];
-	char encrypt[26], decrypt[26];
+	int choice, key;
 	char ch;
-	char *p;
 	FILE *fin, *fout;
 
 	if (argc != 5)
@@ -43,17 +40,9 @@ int main(int argc, char* argv[])
 		exit(1);
 	}
 	
-	choice = argv[1];
-	
-	p = argv[2];
-	for(int i = 0; i < 4; i++){
-		key[i] = p[i] - 'A';
-		
-		if( choice == 2){
-			key[i] = -1 * key[i];
-		}
-	}	
-	
+	choice = atoi(argv[1]);
+	key = atoi(argv[2]);
+
 	if (choice == 2)
 		key = -key;
 	
@@ -68,8 +57,7 @@ int main(int argc, char* argv[])
 
 	while ( fscanf(fin, "%c", &ch) != EOF )
 	{
-		n++;
-		fprintf(fout, "%c", encrypt(ch, keys[n%4]));
+		fprintf(fout, "%c", encrypt(ch, key));
 	}
 
 	fclose(fin);
@@ -78,6 +66,13 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
+/**
+	Perform encryption of a character using the Caesar cipher,
+	or decryption if parameter k has a negative value.
+	@param ch the character to encrypt
+	@param k the encryption key
+	@return the encrypted character
+*/
 char encrypt(char ch, int k)
 {
 	if ( k < 0 )
@@ -92,4 +87,39 @@ char encrypt(char ch, int k)
 	return ch;
 }
 
+
+// remove duplicate characters in array word and return the result string
+char * removeDuplicates(char word []){
+
+
+}
+
+// search the first num characters in array charArray for character target
+// return a non-zero integer if found, otherwise, return 0
+int targetFound(char charArray[], int num, char target){
+
+
+}
+
+// initialize the encrypt array with appropriate cipher letters according 
+// to the given key
+void initializeEncyptArray(char key[], char encrypt[]){
+
+
+}
+
+// initialize the decrypt array with appropriate substitute letters based 
+// on the encrypt array
+void initializeDecyptArray(char encypt[], char decrypt[]){
+
+
+}
+
+// process data from the input file and write the result to the output file
+// pass the encrypt array to parameter substitute if encryption is intended
+// pass the decrypt array to parameter substitute if decryption is intended
+void processInput(FILE * inf, FILE * outf, char substitute[]){
+
+
+}
 
