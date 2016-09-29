@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 char encrypt(char ch, int k);
 
@@ -29,8 +30,9 @@ void processInput(FILE * inf, FILE * outf, char substitute[]);
 
 int main(int argc, char* argv[])
 {  
-	int choice, key;
+	int choice, i, len;
 	char ch;
+	char *key;
 	FILE *fin, *fout;
 
 	if (argc != 5)
@@ -41,10 +43,20 @@ int main(int argc, char* argv[])
 	}
 	
 	choice = atoi(argv[1]);
-	key = atoi(argv[2]);
+	key = argv[2];
+
+	len = strlen(key);
+
+	for(i = 0; i < len; ++i)
+		key[i] = key[i] - 'a';
+		
+	
 
 	if (choice == 2)
-		key = -key;
+		for(i = 0; i < len; ++i){
+			key[i] = - key[i];
+		}
+
 	
     	fin = fopen(argv[3], "r");
 	fout = fopen(argv[4], "w");
@@ -54,10 +66,13 @@ int main(int argc, char* argv[])
 		printf("File could not be opened\n");
 		exit(1);
 	}
-
+	
+	i = 1;
 	while ( fscanf(fin, "%c", &ch) != EOF )
 	{
-		fprintf(fout, "%c", encrypt(ch, key));
+		fprintf(fout, "%c", encrypt(ch, key[i % len]));
+		printf("key: %d\n\n", key[i % len]);
+		++i;	
 	}
 
 	fclose(fin);
