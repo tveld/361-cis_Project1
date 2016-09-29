@@ -1,4 +1,4 @@
-# CIS 363: Substitution Cipher
+# CIS 361: Substitution Cipher
 ### by Troy Veldhuizen
 
 ##Project 1
