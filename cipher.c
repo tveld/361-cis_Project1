@@ -20,11 +20,8 @@ int targetFound(char charArray[], int num, char target);
 
 // initialize the encrypt array with appropriate cipher letters according 
 // to the given key
-void initializeEncyptArray(char key[], char encrypt[]);
+void initEncryptDecryptArrays(char key[], char encrypt[], char decrypt[]);
 
-// initialize the decrypt array with appropriate substitute letters based 
-// on the encrypt array
-void initializeDecyptArray(char encypt[], char decrypt[]);
 
 // process data from the input file and write the result to the output file
 // pass the encrypt array to parameter substitute if encryption is intended
@@ -34,7 +31,7 @@ void processInput(FILE * inf, FILE * outf, char substitute[]);
 int main(int argc, char* argv[])
 {  
 	int choice, i, len;
-	char ch;
+	char ch, encryptArray[26], decryptArray[26];
 	char *key;
 	FILE *fin, *fout;
 
@@ -50,16 +47,24 @@ int main(int argc, char* argv[])
 
 	removeDuplicates(key);
 	
-	len = strlen(key);
-
-	for(i = 0; i < len; ++i)
-		key[i] = key[i] - 'a';
-		
+	initEncryptDecryptArrays(key, encryptArray, decryptArray);
 	
+	for(i = 0; i < 26; ++i){
+		printf("%c: %c\n", i + 65, encryptArray[i]);
+	}
+
+	printf("\n\nDecrypt Array\n\n");
+
+	for(i = 0; i < 26; ++i){
+		printf("%c: %c\n", i + 65, decryptArray[i]);
+	}
+	
+
+	/*	
 
 	if (choice == 2)
 		for(i = 0; i < len; ++i){
-			key[i] = - key[i];
+		//	key[i] = - key[i];
 		}
 
 	
@@ -81,29 +86,8 @@ int main(int argc, char* argv[])
 
 	fclose(fin);
 	fclose(fout);
-
+	*/
 	return 0;
-}
-
-/**
-	Perform encryption of a character using the Caesar cipher,
-	or decryption if parameter k has a negative value.
-	@param ch the character to encrypt
-	@param k the encryption key
-	@return the encrypted character
-*/
-char encrypt(char ch, int k)
-{
-	if ( k < 0 )
-		k = k + 26;
-
-	if ( isupper(ch) )
-		return (ch - 'A' + k) % 26 + 'A';
-	
-	if ( islower(ch) )
-		return (ch - 'a' + k) % 26 + 'a';
-	
-	return ch;
 }
 
 void sortWord(char word[]){
@@ -123,7 +107,7 @@ void sortWord(char word[]){
 
 // remove duplicate characters in array word and return the result string
 char * removeDuplicates(char word []){
-	int i, len;
+	int i, cnt, len;
 	char prev = '\0';
 	
 	sortWord(word);
@@ -131,12 +115,13 @@ char * removeDuplicates(char word []){
 
 	char solution[strlen(word)];
 	
+	cnt = 0;
 	for(i = 0; i < strlen(word); ++i){
 
 		if(prev != word[i]){
-			solution[(strlen(solution) + 1)] = word[i];
-			printf("%c", word[i]);
+			solution[cnt] = word[i];
 			prev = word[i];
+			++cnt;
 		}
 	}
 	
@@ -150,23 +135,44 @@ char * removeDuplicates(char word []){
 // search the initial num characters in array charArray for character target
 // return a non-zero integer if found, otherwise, return 0
 int targetFound(char charArray[], int num, char target){
-
+	
 
 }
 
 // initialize the encrypt array with appropriate cipher letters according 
 // to the given key
-void initializeEncyptArray(char key[], char encrypt[]){
+void initEncryptDecryptArrays(char key[], char encrypt[], char decrypt[]){
+	int i, cnt, keylen;
 
+	keylen = strlen(key);
+	
+	// initially fill arrays with zeros
+	for(i = 0; i < 26; ++i){
+		encrypt[i] = 0;
+		decrypt[i] = 0;
+	}
+	
+	// fill encrypt and decrypt arrays with key
+	for(i = 0; i < keylen; ++i){
+		encrypt[i] = key[i];
+		decrypt[ key[i] - 65] = i + 65;
+	}
 
+	cnt = 0;
+	
+	// check in reversed order if char is used	
+	for(i = 90; i > 65; --i){
+
+		if(decrypt[i - 65] == 0){
+			encrypt[keylen + cnt] = i;	
+			decrypt[i - 65] = keylen + cnt + 65;
+			++cnt;
+		}
+
+	}
+			
 }
-
-// initialize the decrypt array with appropriate substitute letters based 
-// on the encrypt array
-void initializeDecyptArray(char encypt[], char decrypt[]){
-
-
-}
+	
 
 // process data from the input file and write the result to the output file
 // pass the encrypt array to parameter substitute if encryption is intended
