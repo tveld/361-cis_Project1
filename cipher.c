@@ -1,17 +1,20 @@
 // Project: 	Caesar Ciphers – cipher.c
-// Author:	Yonglei Tao
+// Author:	Troy Veldhuizen
 
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+// sort word array
+void sortWord(char word[]);
+
 char encrypt(char ch, int k);
 
 // remove duplicate characters in array word and return the result string
 char * removeDuplicates(char word []);
 
-// search the first num characters in array charArray for character target
+// search the initial num characters in array charArray for character target
 // return a non-zero integer if found, otherwise, return 0
 int targetFound(char charArray[], int num, char target);
 
@@ -45,6 +48,8 @@ int main(int argc, char* argv[])
 	choice = atoi(argv[1]);
 	key = argv[2];
 
+	removeDuplicates(key);
+	
 	len = strlen(key);
 
 	for(i = 0; i < len; ++i)
@@ -71,7 +76,6 @@ int main(int argc, char* argv[])
 	while ( fscanf(fin, "%c", &ch) != EOF )
 	{
 		fprintf(fout, "%c", encrypt(ch, key[i % len]));
-		printf("key: %d\n\n", key[i % len]);
 		++i;	
 	}
 
@@ -102,14 +106,48 @@ char encrypt(char ch, int k)
 	return ch;
 }
 
+void sortWord(char word[]){
+
+	int size = strlen(word);
+	
+	int i, j, temp;
+	for (i=0; i<size-1; i++)		// bubble sort data in the array
+		for (j=size-1; j>i; j--)
+			if (word[j-1] > word[j])
+			{
+				temp = word[j-1];
+				word[j-1] = word[j];
+				word[j] = temp;
+			}
+}
 
 // remove duplicate characters in array word and return the result string
 char * removeDuplicates(char word []){
+	int i, len;
+	char prev = '\0';
+	
+	sortWord(word);
+	len = strlen(word);
 
+	char solution[strlen(word)];
+	
+	for(i = 0; i < strlen(word); ++i){
+
+		if(prev != word[i]){
+			solution[(strlen(solution) + 1)] = word[i];
+			printf("%c", word[i]);
+			prev = word[i];
+		}
+	}
+	
+	strcpy(word, solution);
+
+	return word;
 
 }
 
-// search the first num characters in array charArray for character target
+
+// search the initial num characters in array charArray for character target
 // return a non-zero integer if found, otherwise, return 0
 int targetFound(char charArray[], int num, char target){
 
