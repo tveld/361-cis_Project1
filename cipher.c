@@ -31,7 +31,7 @@ void processInput(FILE * inf, FILE * outf, char substitute[]);
 int main(int argc, char* argv[])
 {  
 	int choice, i, len;
-	char ch, encryptArray[26], decryptArray[26];
+	char ch, encrypt[26], decrypt[26];
 	char *key;
 	FILE *fin, *fout;
 
@@ -47,26 +47,20 @@ int main(int argc, char* argv[])
 
 	removeDuplicates(key);
 	
-	initEncryptDecryptArrays(key, encryptArray, decryptArray);
+	initEncryptDecryptArrays(key, encrypt, decrypt);
 	
+	/*
 	for(i = 0; i < 26; ++i){
-		printf("%c: %c\n", i + 65, encryptArray[i]);
+		printf("%c: %c\n", i + 65, encrypt[i]);
 	}
 
 	printf("\n\nDecrypt Array\n\n");
 
 	for(i = 0; i < 26; ++i){
-		printf("%c: %c\n", i + 65, decryptArray[i]);
+		printf("%c: %c\n", i + 65, decrypt[i]);
 	}
 	
-
-	/*	
-
-	if (choice == 2)
-		for(i = 0; i < len; ++i){
-		//	key[i] = - key[i];
-		}
-
+	*/
 	
     	fin = fopen(argv[3], "r");
 	fout = fopen(argv[4], "w");
@@ -76,17 +70,18 @@ int main(int argc, char* argv[])
 		printf("File could not be opened\n");
 		exit(1);
 	}
-	
-	i = 1;
-	while ( fscanf(fin, "%c", &ch) != EOF )
-	{
-		fprintf(fout, "%c", encrypt(ch, key[i % len]));
-		++i;	
-	}
 
+	if(choice == 1){
+		processInput(fin, fout, encrypt);
+	} else if(choice == 2){
+		processInput(fin, fout, decrypt);
+	} else {
+		printf("Please choose 1 for encrypt, or 2 for decrypt.\n");
+	}
+	
 	fclose(fin);
 	fclose(fout);
-	*/
+	
 	return 0;
 }
 
@@ -131,14 +126,6 @@ char * removeDuplicates(char word []){
 
 }
 
-
-// search the initial num characters in array charArray for character target
-// return a non-zero integer if found, otherwise, return 0
-int targetFound(char charArray[], int num, char target){
-	
-
-}
-
 // initialize the encrypt array with appropriate cipher letters according 
 // to the given key
 void initEncryptDecryptArrays(char key[], char encrypt[], char decrypt[]){
@@ -178,7 +165,19 @@ void initEncryptDecryptArrays(char key[], char encrypt[], char decrypt[]){
 // pass the encrypt array to parameter substitute if encryption is intended
 // pass the decrypt array to parameter substitute if decryption is intended
 void processInput(FILE * inf, FILE * outf, char substitute[]){
-
-
+        char ch;
+	while ( fscanf(inf, "%c", &ch) != EOF )
+        {
+		if(!isalpha(ch)){
+			fprintf(outf, "%c", ch);
+			printf("%c", ch);
+		} else if(islower(ch)){
+			ch = ch - 32;
+			fprintf(outf, "%c", substitute[ch - 65]);
+			printf("%c", substitute[ch - 65]);
+		} else {
+        		fprintf(outf, "%c", substitute[ch - 65]);
+			printf("%c", substitute[ch - 65]);
+		}
+        }
 }
-
