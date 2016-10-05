@@ -170,14 +170,11 @@ void processInput(FILE * inf, FILE * outf, char substitute[]){
         {
 		if(!isalpha(ch)){
 			fprintf(outf, "%c", ch);
-			printf("%c", ch);
 		} else if(islower(ch)){
 			ch = ch - 32;
 			fprintf(outf, "%c", substitute[ch - 65]);
-			printf("%c", substitute[ch - 65]);
 		} else {
         		fprintf(outf, "%c", substitute[ch - 65]);
-			printf("%c", substitute[ch - 65]);
 		}
         }
 }
